@@ -1,0 +1,11 @@
+device: '/dev/input/by-id/ckb-Corsair_Gaming_K70_RGB_RAPIDFIRE_Keyboard_vKB_-event' # The path of the device. Must be a string.
+pre_command: # What commands to run when switching TO guest. Must be a list of strings.
+  - 'glxgears'
+post_command: # What commands to run when switching FROM guest. Must be a list of strings.
+  - 'pkill -9 glxgears'
+shell_mode: true # Sets shell mode for commands. Must be a boolean.
+combination_keys: # These are CTRL_L (29) and CTRL_R (97). In case your keyboard uses something else, customize it here. Must be an uint.
+  - 29
+  - 97
+host: '127.0.0.1' # IP of the tcp server to listen for switch.
+port: 2667 # Port of the tcp server to listen for switch.
