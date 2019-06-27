@@ -1,6 +1,6 @@
-#VFIO-Switcher
+# VFIO-Switcher
 
-######*A custom python3 script to help switching inputs/running programs when evdev switches from and to guest VMs.*
+### *A custom python3 script to help switching inputs/running programs when evdev switches from and to guest VMs.*
 
 > Note:
 > The program will be provided as is, without any explicit nor implicit warranty. If you accuse me of messing up your computer by running this code, i will laugh at you.
