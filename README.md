@@ -28,6 +28,8 @@ Then you can edit the _config.yml_ file according to you preferences and run:
 `python3 main.py`
 
 ## Usage
+
+### Server
 While the _config.yml_ file is commented and pretty self-explanatory, here is each value explained in detail:
 
 |Parameter|Notes|
@@ -40,4 +42,11 @@ While the _config.yml_ file is commented and pretty self-explanatory, here is ea
 |host|On which IP should the TCP server listen for client packet. Note that this interface must be reachable from the vm.|
 |port|On which port to listen for the TCP client packet. Note that this port must be reachable from the vm.|
 
+When run, the script will listen for "combinaton_keys" (defaulting to CTRL_L + CTRL_R), and when detects them (note that those will only be detected when input is attached on the host) it will run pre_command(s)
+
 The script has no other special flags or special functions. Any new idea or contribution (via pull request) is welcome.
+
+### Client
+The client just need to start with: `python3 client.py ip.of.the.host port`
+
+When run the script immediatly exits and the server (running on the host) will run the post_command(s)
