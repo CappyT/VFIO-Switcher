@@ -2,11 +2,12 @@ import evdev
 import yaml
 import subprocess
 import socket
-from threading import Thread
 import _thread
 
 
 def main():
+    # Let's import our lock.
+    global runned
     # Using the ID will ensure the device is always picked, even if its ID changes.
     device = evdev.InputDevice(cfg['device'])
 
@@ -29,14 +30,11 @@ def main():
         if event.code == key2 and event.value == 0:
             # CTRL_R is up, setting its lock to false
             ctrl_r = False
-        if ctrl_r and ctrl_l and event.value == 1:
-            # event.value is needed to actually catch the keydown event and not the "Holding" one, this way, the event
-            # never repeats.
+        if ctrl_r and ctrl_l and not runned:
+            # runned is needed to actually skip multiple "holding" events, this way the event never repeats.
+            runned = True
             # Spawn a new thread for calling the process as missing that will block the main thread.
-            th = Thread(target=run, args=(True,))
-            # Set daemonic mode. This way, the thread exits by itself in the background and quits after it finishes.
-            th.setDaemon(True)
-            th.run()
+            _thread.start_new_thread(run, (True,))
 
 
 def config():
@@ -47,6 +45,8 @@ def config():
 
 
 def server():
+    # Let's import our lock
+    global runned
     # Create the server
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((cfg['host'], cfg['port']))
@@ -61,11 +61,10 @@ def server():
                 break
             # If the data is text "run" then let's fire up the post_process
             if "run" in str(data).strip():
+                # Reset "runned" state
+                runned = False
                 # Spawn a new thread for calling the process as missing that will block the main thread.
-                th = Thread(target=run, args=(False,))
-                # Set daemonic mode. This way, the thread exits by itself in the background and quits after it finishes.
-                th.setDaemon(True)
-                th.run()
+                _thread.start_new_thread(run, (False,))
         except socket.error:
             print("Error while handling socket.")
             break
@@ -92,6 +91,8 @@ def run(start_process):
 if __name__ == "__main__":
     # Load the config and store it in cfg var. So we don't need to read it every time.
     cfg = config()
+    # Create a lock var to never repeat the commands multiple times.
+    runned = False
     # Running server on another thread, to be asynchronous from the first one.
     server_th = _thread.start_new_thread(server, ())
     # Start the program.
