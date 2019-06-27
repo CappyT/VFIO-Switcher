@@ -60,3 +60,5 @@ target/
 \.idea/
 
 venv/
+
+config\.yml
