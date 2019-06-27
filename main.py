@@ -52,9 +52,9 @@ def server():
     s.bind((cfg['host'], cfg['port']))
 
     s.listen(1)
-    conn, addr = s.accept()
 
     while True:
+        conn, addr = s.accept()
         try:
             data = conn.recv(1024)
             if not data:
