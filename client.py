@@ -31,7 +31,7 @@ def connect():
         s.sendall(b'run')
         s.close()
     except Exception as e:
-        print("Exception occourred while connecting: " + str(e))
+        print("Exception occurred while connecting: " + str(e))
 
 
 if __name__ == "__main__":
